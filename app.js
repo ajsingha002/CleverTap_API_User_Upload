@@ -2,6 +2,8 @@ const request = require('request');
 const csv = require('csv-parser');
 const fs = require('fs');
 
+
+//API call headers - as mentioned in Documentation
 const headers = {
     'X-CleverTap-Account-Id': 'RK4-R6K-565Z',
     'X-CleverTap-Passcode': '40c575aa496e4adca295560d38f9e341',
@@ -10,6 +12,7 @@ const headers = {
 
 //const dataString = '{"d":[{"objectId":"ARGHATEST0000002","type":"profile","profileData":{"User ID": "19720A2F-4D56-3615-8EE7-6AJAJ2B31023", "Location": "Mumbai", "Customer Type": "L", "Subcription ID": "B53B21CF-951B-7E01-5A61-CCEE7CAJAJAJ", "Gender": "Male"}},{"objectId":"ARGHATEST0000003","type":"profile","profileData":{"User ID": "19720A2F-4D56-3615-8EE7-6AJAJ2B31023", "Location": "Mumbai", "Customer Type": "L", "Subcription ID": "B53B21CF-951B-7E01-5A61-CCEE7CAJAJAJ", "Gender": "Male"}}]}';
 
+//API call options - as mentioned in Documentation
 const options = {
     url: 'https://api.clevertap.com/1/upload',
     method: 'POST',
@@ -17,6 +20,8 @@ const options = {
     body: {}
 };
 
+//HTTP Callback Handler - Logs output to Console.
+//No Logging Library has been added for Lightweight Call.
 function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
         console.log(body);
@@ -25,6 +30,7 @@ function callback(error, response, body) {
 
 //dataStringArray containing indivisual datastrings for User Profiles
 let dataStringArray = [];
+
 //add iteration code - read CSV file for 100 records and make datastring
 let getDataStringArray = () => {
     fs.createReadStream('data.csv')
@@ -48,7 +54,7 @@ let getDataStringArray = () => {
     sendUserProfileCalls();
   });
 }
-
+//call csv read functionn - description of function added
 getDataStringArray();
 
 //iterator for bulking 100 User Profile Calls together
@@ -67,7 +73,7 @@ let sendUserProfileCalls = () => {
             options.body = JSON.stringify(req);
             //console.log(options);
             request(options, callback);
-            //delay 3 sec
+            //delay 3 sec - can be mentioned if DDOS error was considered
             //setTimeout(function() {}, 3000);
             //empty array for next bulking
             req.d = [];
